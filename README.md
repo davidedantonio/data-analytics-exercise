@@ -90,3 +90,88 @@ Potete utilizzare Node.js o Python per importare i dati CSV in PostgreSQL. Ecco 
    ```bash
    node import.js
    ```
+
+### Opzione 2: Usare Python
+
+1. Installate le dipendenze necessarie:
+   ```bash
+   pip install psycopg2 pandas
+   ```
+2. Create uno script `import.py`:
+
+   ```python
+   import pandas as pd
+   import psycopg2
+
+   # Connessione a PostgreSQL
+   conn = psycopg2.connect(
+        dbname="ecommerce",
+        user="postgres",
+           password="example",
+           host="localhost",
+           port="5432"
+   )
+   cursor = conn.cursor()
+   # Caricamento del file CSV
+   df = pd.read_csv('ordini.csv')
+   # Inserimento dei dati nella tabella
+   for index, row in df.iterrows():
+       cursor.execute(
+           "INSERT INTO ordini (id_ordine, id_cliente, data_ordine, totale, stato) VALUES (%s, %s, %s, %s, %s)",
+           (row['id_ordine'], row['id_cliente'], row['data_ordine'], row['totale'], row['stato'])
+       )
+   conn.commit()
+   cursor.close()
+   conn.close()
+   ```
+
+3. Eseguite lo script:
+   ```bash
+   python import.py
+   ```
+
+# Obiettivo 2: Creare una dashboard Grafana
+
+## Passo 1: Configurare PostgreSQL come fonte dati in Grafana
+
+1. Accedete a Grafana all'indirizzo `http://localhost:3000`.
+2. Andate su **Configuration** > **Data Sources** e cliccate su **Add data source**.
+3. Selezionate **PostgreSQL**.
+4. Compilate i campi con le informazioni del vostro database PostgreSQL:
+   - Host: `host.docker.internal:5432` (se state usando Docker su Windows o Mac)
+   - Database: `ecommerce`
+   - User: `postgres`
+   - Password: `example`
+5. Cliccate su **Save & Test** per verificare la connessione.
+
+## Passo 2: Creare la dashboard
+
+1. Andate su **Create** > **Dashboard**.
+2. Cliccate su **Add new panel**.
+3. Selezionate la fonte dati PostgreSQL.
+4. Scrivete una query SQL per visualizzare i dati desiderati. Ecco alcuni esempi di query:
+   - Numero totale di ordini:
+     ```sql
+     SELECT COUNT(*) AS totale_ordini FROM ordini;
+     ```
+   - Totale delle vendite per mese:
+     ```sql
+     SELECT DATE_TRUNC('month', data_ordine) AS mese, SUM(totale) AS totale_vendite
+     FROM ordini
+     GROUP BY mese
+     ORDER BY mese;
+     ```
+   - Numero di ordini per stato:
+     ```sql
+     SELECT stato, COUNT(*) AS numero_ordini
+     FROM ordini
+     GROUP BY stato;
+     ```
+5. Configurate il tipo di visualizzazione (grafico a barre, grafico a linee, tabella, ecc.) in base ai dati che state visualizzando.
+6. Salvate il pannello e ripetete i passaggi per aggiungere altri pannelli alla dashboard.
+7. Una volta completata la dashboard, cliccate su **Save dashboard** e datele un nome.
+
+# Conclusione
+
+Avete ora importato con successo i dati CSV in PostgreSQL e creato una dashboard Grafana per visualizzare i dati.
+Potete continuare a personalizzare la vostra dashboard aggiungendo ulteriori pannelli e visualizzazioni in base alle vostre esigenze.
