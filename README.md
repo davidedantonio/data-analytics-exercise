@@ -95,9 +95,9 @@ Potete utilizzare Node.js o Python per importare i dati CSV in PostgreSQL. Ecco 
 
 1. Installate le dipendenze necessarie:
    ```bash
-   pip install psycopg2 pandas
+   pip install "psycopg[binary]"
    ```
-2. Create uno script `import.py`:
+2. Create uno script `python_import.py`:
 
    ```python
    import pandas as pd
@@ -127,7 +127,7 @@ Potete utilizzare Node.js o Python per importare i dati CSV in PostgreSQL. Ecco 
 
 3. Eseguite lo script:
    ```bash
-   python import.py
+   python python import.py ./files
    ```
 
 # Obiettivo 2: Creare una dashboard Grafana
