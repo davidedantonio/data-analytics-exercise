@@ -1,0 +1,24 @@
+# --- Node ---
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Env files ---
+.env
+.env.*
+
+# --- IDE ---
+.vscode/
+.idea/
+
+# --- System ---
+.DS_Store
+Thumbs.db
