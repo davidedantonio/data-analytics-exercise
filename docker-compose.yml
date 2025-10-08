@@ -1,16 +1,16 @@
 services:
   postgres:
-    image: postgres:15
+    image: postgres:17
     container_name: postgres_ecommerce
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ecommerce_user
-      POSTGRES_PASSWORD: ecommerce_pass
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ecommerce
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ecommerce_data:/var/lib/postgresql/data
     networks:
       - ecommerce_net
 
@@ -31,7 +31,7 @@ services:
       - grafana_data:/var/lib/grafana
 
 volumes:
-  postgres_data:
+  ecommerce_data:
   grafana_data:
 
 networks:
